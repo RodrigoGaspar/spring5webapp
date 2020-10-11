@@ -1,30 +1,37 @@
 package guru.springframework.spring5webapp.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @ToString
+@Setter
+@Getter
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String title;
-    String isbn;
-//    Set<Author> authors;
+    private Long id;
+    private String title;
+    private String isbn;
 
-    public Book(String title, String isbn) {
+    @ManyToOne
+    private Publisher publisher;
+
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<Author> authors = new HashSet<>();
+
+    public Book(String title, String isbn, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.isbn = isbn;
+        this.publisher = publisher;
+        this.authors = authors;
     }
 
     @Override

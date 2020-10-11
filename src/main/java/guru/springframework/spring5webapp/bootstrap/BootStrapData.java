@@ -9,6 +9,8 @@ import guru.springframework.spring5webapp.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class BootStrapData implements CommandLineRunner {
 
@@ -26,14 +28,46 @@ public class BootStrapData implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Author rodrigo = new Author("Rodrigo", "Gaspar");
-        Book certificacaoJava = new Book("Certificacao Java","1234");
+        Author joao = new Author("Joao", "Silva");
+        Author guilherme = new Author("Guilherme", "Silveira");
+        authorRepository.save(joao);
+        authorRepository.save(guilherme);
+
         Publisher casaDoCodigo = new Publisher("Casa do Codigo","Rua do Manifesto","Sao Paulo","SP",
                 "04209000");
-
-        authorRepository.save(rodrigo);
-        bookRepository.save(certificacaoJava);
+        Publisher editoraAbril = new Publisher("Editora Abril","Rua do Silva","Santos","SP",
+                "09909000");
         publisherRepository.save(casaDoCodigo);
+        publisherRepository.save(editoraAbril);
+
+        Book certificacaoJava = new Book();
+        certificacaoJava.setTitle("Certificacao Java");
+        certificacaoJava.setIsbn("0001");
+        certificacaoJava.setPublisher(casaDoCodigo);
+        certificacaoJava.getAuthors().add(joao);
+
+        Book javaCompleto = new Book();
+        javaCompleto.setTitle("Java Completo");
+        javaCompleto.setIsbn("0002");
+        javaCompleto.setPublisher(editoraAbril);
+        javaCompleto.getAuthors().add(guilherme);
+
+        Book intellijCompleto = new Book();
+        intellijCompleto.setTitle("Intellij Completo");
+        intellijCompleto.setIsbn("0003");
+        intellijCompleto.setPublisher(casaDoCodigo);
+        intellijCompleto.getAuthors().add(guilherme);
+
+        Book javaForDummies = new Book();
+        javaForDummies.setTitle("Java for Dummies");
+        javaForDummies.setIsbn("0004");
+        javaForDummies.setPublisher(editoraAbril);
+        javaForDummies.getAuthors().add(joao);
+
+        bookRepository.save(certificacaoJava);
+        bookRepository.save(javaCompleto);
+        bookRepository.save(intellijCompleto);
+        bookRepository.save(javaForDummies);
 
         System.out.println("Authors count: " + authorRepository.count());
         System.out.println("Books count: " + bookRepository.count());
